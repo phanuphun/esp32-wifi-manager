@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>ตั้งค่า WiFi</title>
+</head>
+
+<body>
+  <h2>ตั้งค่า WiFi ของ ESP32</h2>
+
+  <form action="/save" method="POST">
+    SSID: <input type="text" name="ssid"><br><br>
+    Password: <input type="password" name="password"><br><br>
+    <input type="submit" value="บันทึก">
+  </form><br />
+
+  <button id="resetBtn">Reset Factory Mode</button>
+  <button id="restartBtn">Restart ESP</button>
+  <br />
+  <button id="goToVuePageBtn"> Go to Vue Page </button>
+
+  <script>
+    document.getElementById('resetBtn').addEventListener('click', function () {
+      if (confirm('ยืนยันคืนค่าโรงงาน? ชื่อ Hotspot จะกลับเป็นค่าเริ่มต้น')) {
+        fetch('/reset', { method: 'DELETE' })
+          .then(res => res.text())
+          .then(text => document.body.innerHTML = text)
+          .catch(err => alert('เกิดข้อผิดพลาด: ' + err));
+      }
+    });
+
+    document.getElementById('restartBtn').addEventListener('click', function () {
+      if (confirm('ยืนยัน Restart ESP32?')) {
+        fetch('/restart', { method: 'PUT' })
+          .then(res => res.text())
+          .then(text => document.body.innerHTML = text)
+          .catch(err => alert('เกิดข้อผิดพลาด: ' + err));
+      }
+    });
+
+    document.getElementById('goToVuePageBtn').addEventListener('click', function () {
+      if (confirm("อยากไปหน้าใหม่ใช่หรือไม่ ?")) {
+        window.location.href = '/vue';
+      }
+    })
+  </script>
+</body>
+
+</html>
