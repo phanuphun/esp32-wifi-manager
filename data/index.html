@@ -14,6 +14,15 @@
     Password: <input type="password" name="password"><br><br>
     <input type="submit" value="บันทึก">
   </form><br />
+  <hr>
+
+  <h2> ตั้งค่า WiFi STA</h2>
+  <form id="connectWifiForm">
+    SSID: <input type="text" name="ssid" id="staSsid"><br><br>
+    Password: <input type="password" name="password" id="staPassword"><br><br>
+    <input type="submit" value="เชื่อมต่อ">
+  </form>
+  <hr>
 
   <button id="resetBtn">Reset Factory Mode</button>
   <button id="restartBtn">Restart ESP</button>
@@ -44,6 +53,21 @@
         window.location.href = '/vue';
       }
     })
+
+    document.getElementById('connectWifiForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const ssid = document.getElementById('staSsid').value;
+      const password = document.getElementById('staPassword').value;
+
+      fetch('/connect-wifi', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `ssid=${encodeURIComponent(ssid)}&password=${encodeURIComponent(password)}`
+      })
+        .then(res => res.json())
+        .then(data => alert(data.message || 'บันทึกแล้ว กำลังเชื่อมต่อ...'))
+        .catch(err => alert('เกิดข้อผิดพลาด: ' + err));
+    });
   </script>
 </body>
 
